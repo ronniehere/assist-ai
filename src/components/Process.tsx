@@ -45,7 +45,7 @@ const Process = () => {
             <div key={index} className={`flex flex-col lg:flex-row items-center gap-8 ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
               <div className="flex-1">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-teal-600 to-orange-600 text-white rounded-full flex items-center justify-center text-lg font-bold mr-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-gray-900 text-white rounded-full flex items-center justify-center text-lg font-bold mr-4">
                     {step.number}
                   </div>
                   <h3 className="text-2xl font-semibold text-gray-900">{step.title}</h3>
@@ -54,8 +54,8 @@ const Process = () => {
               </div>
               
               <div className="flex-1">
-                <div className="bg-gradient-to-br from-teal-50 to-orange-50 p-8 rounded-xl">
-                  <div className="w-full h-32 bg-gradient-to-r from-teal-100 to-orange-100 rounded-lg flex items-center justify-center">
+                <div className="bg-gradient-to-br from-blue-50 to-gray-100 p-8 rounded-xl">
+                  <div className="w-full h-32 bg-gradient-to-r from-blue-100 to-gray-200 rounded-lg flex items-center justify-center">
                     <div className="text-6xl font-bold text-gray-300">{step.number}</div>
                   </div>
                 </div>
@@ -65,7 +65,7 @@ const Process = () => {
         </div>
 
         <div className="text-center mt-20">
-          <div className="bg-gradient-to-r from-teal-600 to-orange-600 text-white p-12 rounded-2xl">
+          <div className="bg-gradient-to-r from-blue-600 to-gray-900 text-white p-12 rounded-2xl">
             <h3 className="text-3xl font-bold mb-4">Ready to Transform Your Productivity?</h3>
             <p className="text-xl mb-8 opacity-90">
               Join hundreds of business professionals who have already discovered the power of professional virtual assistance. Get started today and experience the difference quality support can make.
@@ -77,7 +77,7 @@ const Process = () => {
                   element.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
-              className="bg-white text-teal-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               Start Your Free Consultation
             </button>

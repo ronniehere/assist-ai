@@ -17,7 +17,7 @@ const About = () => {
             <p className="text-lg text-gray-600 mb-6 leading-relaxed">
               Founded on the principle that every business professional deserves access to skilled support without the overhead costs of traditional staffing, we work with entrepreneurs, small to medium enterprises, and growing companies who understand the value of efficient, reliable virtual assistance.
             </p>
-            <div className="bg-gradient-to-r from-teal-600 to-orange-600 text-white p-6 rounded-xl">
+            <div className="bg-gradient-to-r from-blue-600 to-gray-900 text-white p-6 rounded-xl">
               <h3 className="text-xl font-semibold mb-3">
                 Not everything powerful has to look complicated
               </h3>
@@ -28,7 +28,7 @@ const About = () => {
           </div>
           
           <div className="space-y-6">
-            <div className="bg-teal-50 p-6 rounded-xl border-l-4 border-teal-600">
+            <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-600">
               <div className="flex items-start">
                 <div className="text-2xl mr-4">💬</div>
                 <div>
@@ -40,7 +40,7 @@ const About = () => {
               </div>
             </div>
 
-            <div className="bg-orange-50 p-6 rounded-xl border-l-4 border-orange-600">
+            <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-gray-800">
               <div className="flex items-start">
                 <div className="text-2xl mr-4">🔧</div>
                 <div>
@@ -52,7 +52,7 @@ const About = () => {
               </div>
             </div>
 
-            <div className="bg-emerald-50 p-6 rounded-xl border-l-4 border-emerald-600">
+            <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-blue-600">
               <div className="flex items-start">
                 <div className="text-2xl mr-4">✅</div>
                 <div>
