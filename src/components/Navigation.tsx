@@ -1,9 +1,11 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -18,9 +20,9 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-gray-900 bg-clip-text text-transparent">
+            <button onClick={() => navigate('/')} className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-gray-900 bg-clip-text text-transparent">
               assistAI
-            </h1>
+            </button>
           </div>
           
           <div className="hidden md:block">
@@ -42,6 +44,12 @@ const Navigation = () => {
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
               >
                 Process
+              </button>
+              <button 
+                onClick={() => navigate('/blog')}
+                className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium transition-colors"
+              >
+                Blog
               </button>
               <button 
                 onClick={() => scrollToSection('contact')}
@@ -90,6 +98,12 @@ const Navigation = () => {
                 className="block text-gray-700 hover:text-blue-600 px-3 py-2 text-base font-medium w-full text-left"
               >
                 Process
+              </button>
+              <button 
+                onClick={() => navigate('/blog')}
+                className="block text-gray-700 hover:text-blue-600 px-3 py-2 text-base font-medium w-full text-left"
+              >
+                Blog
               </button>
               <button 
                 onClick={() => scrollToSection('contact')}
