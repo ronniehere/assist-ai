@@ -1,83 +1,30 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // Admin credentials
-  const ADMIN_USERNAME = "admin";
-  const ADMIN_PASSWORD = "assist2024";
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (credentials.username === ADMIN_USERNAME && credentials.password === ADMIN_PASSWORD) {
+  useEffect(() => {
+    if (localStorage.getItem('adminLoggedIn') === 'true') {
       setIsLoggedIn(true);
-      setError('');
-      localStorage.setItem('adminLoggedIn', 'true');
     } else {
-      setError('Invalid credentials');
+      // Redirect to home if not logged in
+      navigate('/');
     }
-  };
+  }, [navigate]);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     localStorage.removeItem('adminLoggedIn');
-    setCredentials({ username: '', password: '' });
+    navigate('/');
   };
 
-  // Check if already logged in
-  useState(() => {
-    if (localStorage.getItem('adminLoggedIn') === 'true') {
-      setIsLoggedIn(true);
-    }
-  });
-
   if (!isLoggedIn) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-          <h1 className="text-2xl font-bold text-center mb-6">Admin Login</h1>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                type="text"
-                value={credentials.username}
-                onChange={(e) => setCredentials({...credentials, username: e.target.value})}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={credentials.password}
-                onChange={(e) => setCredentials({...credentials, password: e.target.value})}
-                required
-              />
-            </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
-              Login
-            </Button>
-          </form>
-          <div className="mt-4 p-4 bg-gray-100 rounded-lg text-sm">
-            <p className="font-semibold">Demo Credentials:</p>
-            <p>Username: admin</p>
-            <p>Password: assist2024</p>
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
