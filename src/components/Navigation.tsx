@@ -15,6 +15,11 @@ const Navigation = () => {
     setIsMenuOpen(false);
   };
 
+  const handleScheduleCall = () => {
+    window.open("https://calendly.com/abe-sshift/15-minute-meeting-for-assistai", "_blank");
+    setIsMenuOpen(false);
+  };
+
   return (
     <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,6 +62,13 @@ const Navigation = () => {
               >
                 Contact
               </button>
+              <Button 
+                onClick={handleScheduleCall}
+                variant="outline"
+                className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-2 rounded-full transition-all duration-300"
+              >
+                Schedule a call
+              </Button>
               <Button 
                 onClick={() => scrollToSection('contact')}
                 className="bg-gradient-to-r from-blue-600 to-gray-900 hover:from-blue-700 hover:to-black text-white px-6 py-2 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
@@ -111,6 +123,13 @@ const Navigation = () => {
               >
                 Contact
               </button>
+              <Button 
+                onClick={handleScheduleCall}
+                variant="outline"
+                className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-2 rounded-full transition-all duration-300 w-full mt-2"
+              >
+                Schedule a call
+              </Button>
               <Button 
                 onClick={() => scrollToSection('contact')}
                 className="bg-gradient-to-r from-blue-600 to-gray-900 hover:from-blue-700 hover:to-black text-white px-6 py-2 rounded-full transition-all duration-300 w-full mt-2"
