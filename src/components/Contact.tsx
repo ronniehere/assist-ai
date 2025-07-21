@@ -26,52 +26,52 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-gray-50">
+    <section id="contact" className="py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
             Contact Us
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Ready to get started? Get in touch with us today and discover how assistAI can transform your business productivity.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-8">Get in Touch</h3>
+            <h3 className="text-2xl font-semibold text-foreground mb-8">Get in Touch</h3>
             
             <div className="space-y-6">
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-card border border-border rounded-sm flex items-center justify-center mr-4">
+                  <svg className="w-6 h-6 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900">Email</h4>
-                  <p className="text-gray-600">hello@assistaihelp.com</p>
+                  <h4 className="font-semibold text-foreground">Email</h4>
+                  <p className="text-muted-foreground">hello@assistaihelp.com</p>
                 </div>
               </div>
 
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 bg-card border border-border rounded-sm flex items-center justify-center mr-4">
+                  <svg className="w-6 h-6 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900">Support</h4>
-                  <p className="text-gray-600">Available 24/7 through our platform</p>
+                  <h4 className="font-semibold text-foreground">Support</h4>
+                  <p className="text-muted-foreground">Available 24/7 through our platform</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-sm">
+          <div className="bg-card p-8 rounded-sm border border-border">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
                   Name *
                 </label>
                 <input
@@ -81,13 +81,13 @@ const Contact = () => {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 bg-background border border-border rounded-sm focus:ring-2 focus:ring-foreground focus:border-transparent outline-none transition-all text-foreground"
                   placeholder="Your full name"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
                   Email *
                 </label>
                 <input
@@ -97,13 +97,13 @@ const Contact = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 bg-background border border-border rounded-sm focus:ring-2 focus:ring-foreground focus:border-transparent outline-none transition-all text-foreground"
                   placeholder="your@email.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="company" className="block text-sm font-medium text-foreground mb-2">
                   Company
                 </label>
                 <input
@@ -112,13 +112,13 @@ const Contact = () => {
                   name="company"
                   value={formData.company}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 bg-background border border-border rounded-sm focus:ring-2 focus:ring-foreground focus:border-transparent outline-none transition-all text-foreground"
                   placeholder="Your company name"
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
                   Message *
                 </label>
                 <textarea
@@ -128,14 +128,14 @@ const Contact = () => {
                   rows={4}
                   value={formData.message}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all resize-none"
+                  className="w-full px-4 py-3 bg-background border border-border rounded-sm focus:ring-2 focus:ring-foreground focus:border-transparent outline-none transition-all resize-none text-foreground"
                   placeholder="Tell us about your business needs..."
                 />
               </div>
 
               <Button 
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-gray-900 hover:from-blue-700 hover:to-black text-white py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 py-3 rounded-sm transition-all duration-300"
               >
                 Send Message
               </Button>
