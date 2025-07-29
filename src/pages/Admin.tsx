@@ -3,27 +3,77 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { User } from "@supabase/supabase-js";
+
+interface BlogPost {
+  id: string;
+  title: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+}
 
 const Admin = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
-    if (localStorage.getItem('adminLoggedIn') === 'true') {
-      setIsLoggedIn(true);
-    } else {
-      // Redirect to home if not logged in
-      navigate('/');
-    }
+    // Check auth state
+    const getUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser(session.user);
+      } else {
+        navigate('/auth');
+      }
+      setLoading(false);
+    };
+
+    getUser();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        setUser(session.user);
+      } else {
+        setUser(null);
+        navigate('/auth');
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem('adminLoggedIn');
-    navigate('/');
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Signed out",
+        description: "Successfully signed out",
+      });
+      navigate('/');
+    }
   };
 
-  if (!isLoggedIn) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
     return null;
   }
 
@@ -53,46 +103,122 @@ const Admin = () => {
 };
 
 const AdminDashboard = () => {
-  const [posts, setPosts] = useState(() => {
-    const saved = localStorage.getItem('blogPosts');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [posts, setPosts] = useState<BlogPost[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [currentPost, setCurrentPost] = useState({ id: '', title: '', content: '', date: '' });
+  const [currentPost, setCurrentPost] = useState({ id: '', title: '', content: '' });
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
-  const savePosts = (newPosts: any[]) => {
-    setPosts(newPosts);
-    localStorage.setItem('blogPosts', JSON.stringify(newPosts));
-  };
+  // Fetch posts from Supabase
+  const fetchPosts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isEditing) {
-      const updatedPosts = posts.map((post: any) => 
-        post.id === currentPost.id ? currentPost : post
-      );
-      savePosts(updatedPosts);
-    } else {
-      const newPost = {
-        ...currentPost,
-        id: Date.now().toString(),
-        date: new Date().toLocaleDateString()
-      };
-      savePosts([newPost, ...posts]);
+      if (error) throw error;
+      setPosts(data || []);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch posts",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
     }
-    setCurrentPost({ id: '', title: '', content: '', date: '' });
-    setIsEditing(false);
   };
 
-  const handleEdit = (post: any) => {
-    setCurrentPost(post);
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      if (isEditing) {
+        const { error } = await supabase
+          .from('blog_posts')
+          .update({
+            title: currentPost.title,
+            content: currentPost.content,
+          })
+          .eq('id', currentPost.id);
+
+        if (error) throw error;
+        
+        toast({
+          title: "Success",
+          description: "Post updated successfully",
+        });
+      } else {
+        const { error } = await supabase
+          .from('blog_posts')
+          .insert({
+            title: currentPost.title,
+            content: currentPost.content,
+            user_id: user.id,
+          });
+
+        if (error) throw error;
+        
+        toast({
+          title: "Success",
+          description: "Post created successfully",
+        });
+      }
+
+      setCurrentPost({ id: '', title: '', content: '' });
+      setIsEditing(false);
+      fetchPosts();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to save post",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEdit = (post: BlogPost) => {
+    setCurrentPost({
+      id: post.id,
+      title: post.title,
+      content: post.content,
+    });
     setIsEditing(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this post?')) {
-      const updatedPosts = posts.filter((post: any) => post.id !== id);
-      savePosts(updatedPosts);
+      try {
+        const { error } = await supabase
+          .from('blog_posts')
+          .delete()
+          .eq('id', id);
+
+        if (error) throw error;
+        
+        toast({
+          title: "Success",
+          description: "Post deleted successfully",
+        });
+        fetchPosts();
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to delete post",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -133,7 +259,7 @@ const AdminDashboard = () => {
                 variant="outline" 
                 onClick={() => {
                   setIsEditing(false);
-                  setCurrentPost({ id: '', title: '', content: '', date: '' });
+                  setCurrentPost({ id: '', title: '', content: '' });
                 }}
               >
                 Cancel
@@ -149,7 +275,7 @@ const AdminDashboard = () => {
           {posts.map((post: any) => (
             <div key={post.id} className="bg-card p-4 rounded-sm border border-border">
               <h3 className="font-semibold text-lg text-foreground">{post.title}</h3>
-              <p className="text-muted-foreground text-sm mb-2">{post.date}</p>
+              <p className="text-muted-foreground text-sm mb-2">{new Date(post.created_at).toLocaleDateString()}</p>
               <p className="text-muted-foreground line-clamp-2">{post.content.substring(0, 100)}...</p>
               <div className="mt-3 flex gap-2">
                 <Button size="sm" onClick={() => handleEdit(post)} variant="outline">

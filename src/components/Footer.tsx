@@ -1,29 +1,8 @@
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
-  const [showAdminLogin, setShowAdminLogin] = useState(false);
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
-  const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  // Admin credentials
-  const ADMIN_USERNAME = "admin";
-  const ADMIN_PASSWORD = "assist2024";
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (credentials.username === ADMIN_USERNAME && credentials.password === ADMIN_PASSWORD) {
-      localStorage.setItem('adminLoggedIn', 'true');
-      navigate('/admin');
-    } else {
-      setError('Invalid credentials');
-    }
-  };
 
   return (
     <footer className="bg-background border-t border-border py-12">
@@ -83,46 +62,12 @@ const Footer = () => {
               © 2024 assistAI. All rights reserved.
             </p>
             <button 
-              onClick={() => setShowAdminLogin(!showAdminLogin)}
+              onClick={() => navigate('/auth')}
               className="text-muted-foreground hover:text-foreground text-xs mt-2 md:mt-0"
             >
-              Admin
+              Admin Login
             </button>
           </div>
-          
-          {showAdminLogin && (
-            <div className="mt-6 max-w-md mx-auto bg-card border border-border p-6 rounded-sm">
-              <h4 className="text-lg font-semibold mb-4 text-foreground">Admin Login</h4>
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div>
-                  <Label htmlFor="admin-username" className="text-muted-foreground">Username</Label>
-                  <Input
-                    id="admin-username"
-                    type="text"
-                    value={credentials.username}
-                    onChange={(e) => setCredentials({...credentials, username: e.target.value})}
-                    required
-                    className="bg-background border-border text-foreground"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="admin-password" className="text-muted-foreground">Password</Label>
-                  <Input
-                    id="admin-password"
-                    type="password"
-                    value={credentials.password}
-                    onChange={(e) => setCredentials({...credentials, password: e.target.value})}
-                    required
-                    className="bg-background border-border text-foreground"
-                  />
-                </div>
-                {error && <p className="text-destructive text-sm">{error}</p>}
-                <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                  Login
-                </Button>
-              </form>
-            </div>
-          )}
         </div>
       </div>
     </footer>

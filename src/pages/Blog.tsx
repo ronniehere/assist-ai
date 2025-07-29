@@ -2,16 +2,38 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+
+interface BlogPost {
+  id: string;
+  title: string;
+  content: string;
+  created_at: string;
+}
 
 const Blog = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const saved = localStorage.getItem('blogPosts');
-    if (saved) {
-      setPosts(JSON.parse(saved));
-    }
+    const fetchPosts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        setPosts(data || []);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   return (
@@ -49,15 +71,19 @@ const Blog = () => {
 
       {/* Blog Posts */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {posts.length > 0 ? (
+        {loading ? (
+          <div className="text-center py-16">
+            <div className="text-foreground">Loading posts...</div>
+          </div>
+        ) : posts.length > 0 ? (
           <div className="space-y-8">
-            {posts.map((post: any) => (
+            {posts.map((post) => (
               <article key={post.id} className="bg-card rounded-sm border border-border p-8 hover:border-muted transition-colors">
                 <div className="mb-4">
                   <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
                     {post.title}
                   </h2>
-                  <p className="text-muted-foreground text-sm">Published on {post.date}</p>
+                  <p className="text-muted-foreground text-sm">Published on {new Date(post.created_at).toLocaleDateString()}</p>
                 </div>
                 <div className="prose prose-lg max-w-none">
                   <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
