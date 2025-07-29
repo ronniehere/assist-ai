@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { User } from "@supabase/supabase-js";
 
 interface BlogPost {
   id: string;
@@ -14,6 +15,7 @@ interface BlogPost {
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,7 +35,20 @@ const Blog = () => {
       }
     };
 
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user || null);
+    };
+
     fetchPosts();
+    checkAuth();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (
@@ -49,9 +64,11 @@ const Blog = () => {
               <Button onClick={() => navigate('/')} variant="outline">
                 Home
               </Button>
-              <Button onClick={() => navigate('/admin')} variant="outline">
-                Admin
-              </Button>
+              {user && (
+                <Button onClick={() => navigate('/admin')} variant="outline">
+                  Admin
+                </Button>
+              )}
             </div>
           </div>
         </div>
